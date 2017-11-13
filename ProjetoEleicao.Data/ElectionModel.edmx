@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="electionsystemModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tb_candidato">
+          <Key>
+            <PropertyRef Name="ID_CANDIDATO" />
+          </Key>
+          <Property Name="ID_CANDIDATO" Type="int" Nullable="false" />
+          <Property Name="NOME" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="FOTO" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="ID_TIPO_CANDIDATO" Type="int" Nullable="false" />
+          <Property Name="QUANTIDADE_VOTOS" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_eleitor">
+          <Key>
+            <PropertyRef Name="ID_ELEITOR" />
+          </Key>
+          <Property Name="ID_ELEITOR" Type="int" Nullable="false" />
+          <Property Name="CPF" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="NOME" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="FOTO" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="VOTOU" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_tipo_candidato">
+          <Key>
+            <PropertyRef Name="ID_TIPO_CANDIDATO" />
+          </Key>
+          <Property Name="ID_TIPO_CANDIDATO" Type="int" Nullable="false" />
+          <Property Name="DESCRICAO" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_uev">
+          <Key>
+            <PropertyRef Name="ID_UEV" />
+          </Key>
+          <Property Name="ID_UEV" Type="int" Nullable="false" />
+          <Property Name="INICIO" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="FIM" Type="datetime" Precision="0" Nullable="false" />
+        </EntityType>
+        <Association Name="ID_TIPO_CANDIDATO_TIPO_CANDIDATO">
+          <End Role="tb_tipo_candidato" Type="Self.tb_tipo_candidato" Multiplicity="1" />
+          <End Role="tb_candidato" Type="Self.tb_candidato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_tipo_candidato">
+              <PropertyRef Name="ID_TIPO_CANDIDATO" />
+            </Principal>
+            <Dependent Role="tb_candidato">
+              <PropertyRef Name="ID_TIPO_CANDIDATO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="electionsystemModelStoreContainer">
+          <EntitySet Name="tb_candidato" EntityType="Self.tb_candidato" Schema="electionsystem" store:Type="Tables" />
+          <EntitySet Name="tb_eleitor" EntityType="Self.tb_eleitor" Schema="electionsystem" store:Type="Tables" />
+          <EntitySet Name="tb_tipo_candidato" EntityType="Self.tb_tipo_candidato" Schema="electionsystem" store:Type="Tables" />
+          <EntitySet Name="tb_uev" EntityType="Self.tb_uev" Schema="electionsystem" store:Type="Tables" />
+          <AssociationSet Name="ID_TIPO_CANDIDATO_TIPO_CANDIDATO" Association="Self.ID_TIPO_CANDIDATO_TIPO_CANDIDATO">
+            <End Role="tb_tipo_candidato" EntitySet="tb_tipo_candidato" />
+            <End Role="tb_candidato" EntitySet="tb_candidato" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="electionsystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Eleitor">
+          <Key>
+            <PropertyRef Name="IdEleitor" />
+          </Key>
+          <Property Name="IdEleitor" Type="Int32" Nullable="false" />
+          <Property Name="Cpf" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nome" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Foto" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Votou" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoCandidato">
+          <Key>
+            <PropertyRef Name="IdTipoCandidato" />
+          </Key>
+          <Property Name="IdTipoCandidato" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Candidato" Relationship="electionsystemModel.ID_TIPO_CANDIDATO_TIPO_CANDIDATO" FromRole="TipoCandidato" ToRole="tb_candidato" />
+        </EntityType>
+        <EntityContainer Name="electionsystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EleitorSet" EntityType="electionsystemModel.Eleitor" />
+          <EntitySet Name="TipoCandidatoSet" EntityType="electionsystemModel.TipoCandidato" />
+          <EntitySet Name="CandidatoSet" EntityType="electionsystemModel.Candidato" />
+          <AssociationSet Name="ID_TIPO_CANDIDATO_TIPO_CANDIDATO" Association="electionsystemModel.ID_TIPO_CANDIDATO_TIPO_CANDIDATO">
+            <End Role="TipoCandidato" EntitySet="TipoCandidatoSet" />
+            <End Role="tb_candidato" EntitySet="CandidatoSet" />
+          </AssociationSet>
+          <EntitySet Name="UevSet" EntityType="electionsystemModel.Uev" />
+        </EntityContainer>
+        <EntityType Name="Candidato">
+          <Key>
+            <PropertyRef Name="IdCandidato" />
+          </Key>
+          <Property Name="IdCandidato" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Foto" Type="String" Nullable="false" FixedLength="false" Unicode="false" MaxLength="400" />
+          <Property Name="IdTipoCandidato" Type="Int32" Nullable="false" />
+          <Property Name="QuantidadeVotos" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TipoCandidato" Relationship="electionsystemModel.ID_TIPO_CANDIDATO_TIPO_CANDIDATO" FromRole="tb_candidato" ToRole="TipoCandidato" />
+        </EntityType>
+        <Association Name="ID_TIPO_CANDIDATO_TIPO_CANDIDATO">
+          <End Type="electionsystemModel.TipoCandidato" Role="TipoCandidato" Multiplicity="1" />
+          <End Type="electionsystemModel.Candidato" Role="tb_candidato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoCandidato">
+              <PropertyRef Name="IdTipoCandidato" />
+            </Principal>
+            <Dependent Role="tb_candidato">
+              <PropertyRef Name="IdTipoCandidato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Uev">
+          <Key>
+            <PropertyRef Name="IdUev" />
+          </Key>
+          <Property Name="IdUev" Type="Int32" Nullable="false" />
+          <Property Name="Inicio" Type="DateTime" Nullable="false" />
+          <Property Name="Fim" Type="DateTime" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="electionsystemModelStoreContainer" CdmEntityContainer="electionsystemEntities">
+          <EntitySetMapping Name="EleitorSet">
+            <EntityTypeMapping TypeName="electionsystemModel.Eleitor">
+              <MappingFragment StoreEntitySet="tb_eleitor">
+                <ScalarProperty Name="IdEleitor" ColumnName="ID_ELEITOR" />
+                <ScalarProperty Name="Cpf" ColumnName="CPF" />
+                <ScalarProperty Name="Nome" ColumnName="NOME" />
+                <ScalarProperty Name="Foto" ColumnName="FOTO" />
+                <ScalarProperty Name="Votou" ColumnName="VOTOU" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoCandidatoSet">
+            <EntityTypeMapping TypeName="electionsystemModel.TipoCandidato">
+              <MappingFragment StoreEntitySet="tb_tipo_candidato">
+                <ScalarProperty Name="IdTipoCandidato" ColumnName="ID_TIPO_CANDIDATO" />
+                <ScalarProperty Name="Descricao" ColumnName="DESCRICAO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CandidatoSet">
+            <EntityTypeMapping TypeName="electionsystemModel.Candidato">
+              <MappingFragment StoreEntitySet="tb_candidato">
+                <ScalarProperty Name="QuantidadeVotos" ColumnName="QUANTIDADE_VOTOS" />
+                <ScalarProperty Name="IdTipoCandidato" ColumnName="ID_TIPO_CANDIDATO" />
+                <ScalarProperty Name="Foto" ColumnName="FOTO" />
+                <ScalarProperty Name="Nome" ColumnName="NOME" />
+                <ScalarProperty Name="IdCandidato" ColumnName="ID_CANDIDATO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UevSet">
+            <EntityTypeMapping TypeName="electionsystemModel.Uev">
+              <MappingFragment StoreEntitySet="tb_uev">
+                <ScalarProperty Name="Fim" ColumnName="FIM" />
+                <ScalarProperty Name="Inicio" ColumnName="INICIO" />
+                <ScalarProperty Name="IdUev" ColumnName="ID_UEV" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

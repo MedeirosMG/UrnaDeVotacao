@@ -1,0 +1,139 @@
+﻿<!-- Pagina de autenticacao -->
+<div class="col-md-4 col-sm-4"></div>
+<div class="text-center col-md-8 col-sm-8" style="margin-top:30%">
+    <div class="row">
+        <div class="col-md-5 col-sm-5">
+            <input type="text" class="form-control" id="eleitor_cpf" placeholder="cpf" ng-model="eleitorCpf">
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:10px">
+        <div class="col-md-5 col-sm-5">
+            <button ng-click="ButtonLogin()" class="btn btn-default pull-left">Iniciar votacao</button>
+        </div>
+    </div>            
+</div>
+
+<!-- Modal de votacao -->
+<div id="ModalVotacao" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Votação - <b>{{tipoCandidatoS}}</b></h4>
+            </div>
+
+            <div class="panel-body" ng-if="tipoCandidato==-1">
+                <div class="col-md-4">
+                    <label class="text-muted">
+                        {{CandidatosAdicionados[0].NomeCandidato}}
+                    </label>
+                    <img class="img-responsive img-rounded img-circle" ng-src="~/Images/{{CandidatosAdicionados[0].fotoCandidato}}" style="height:100px;width:100px" />
+                </div>
+                <div class="col-md-4">
+                    <label class="text-muted">
+                        {{CandidatosAdicionados[1].NomeCandidato}}
+                    </label>
+                    <img class="img-responsive img-rounded img-circle" ng-src="~/Images/{{CandidatosAdicionados[1].fotoCandidato}}" style="height:100px;width:100px" />
+                </div>
+                <div class="col-md-4">
+                    <label class="text-muted">
+                        {{CandidatosAdicionados[2].NomeCandidato}}
+                    </label>
+                    <img class="img-responsive img-rounded img-circle" ng-src="~/Images/{{CandidatosAdicionados[2].fotoCandidato}}" style="height:100px;width:100px" />
+                </div>                
+            </div>
+
+            <div class="panel-body" ng-if="tipoCandidato!=-1">
+                <div class="row">
+                    <div class="col-md-5 col-sm-5"></div>
+                    <div class="col-md-4 col-sm-4">
+                        <img ng-hide="caminhoImagem == ''" class="img-responsive img-rounded img-circle" ng-src="~/Images/{{caminhoImagem}}" style="height:100px;width:100px"/>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px">
+                    <div class="col-md-5 col-sm-5"></div>
+                    <div class="col-md-4 col-sm-4">
+                        <label class="text-muted text-center" ng-bind="nomeCandidato"></label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px">
+                    <div class="col-md-4 col-sm-4">
+                        <label class="text-muted">Código do candidato:</label>
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                        <input name="candidato" type="text" class="col-md-4 form-control" ng-model="modeloCandidato.codigo" ng-change="carregaCandidato()" placeholder="Candidato" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 col-sm-4"></div>
+
+                    <div class="col-md-8 col-sm-8">
+                        <button class="btn btn-default" ng-click="VotoBranco()">Branco</button>
+                        <button class="btn btn-default" ng-click="VotoNulo()">Nulo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-md-6 col-sm-9">
+                    <p class="pull-left">&copy; Projeto Fei Eleição</p>
+                </div>
+                <div class="col-md-3 col-sm-3" ng-hide="tipoCandidato==-1">
+                    <button class="btn btn-success" ng-click="armanezaVoto()">Votar</button>
+                </div>
+                <div class="col-md-3 col-sm-3" ng-hide="tipoCandidato!=-1">
+                    <button class="btn btn-success" ng-click="confirmaVotos()">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="FinalizaOperador" class="modal fade modal-center" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="panel-body">
+                <form class="form-group">
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <label class="text-muted">Digite a senha de administrador:</label>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <input ng-model="SenhaAdministrador" type="password" class="form-control" />
+                            <button class="btn btn-default pull-right" style="margin-top:5px" ng-click="FinalizaVotacao()">Confirmar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="LoginOperador" class="modal fade modal-center" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="panel-body">
+                <form class="form-group">
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <label class="text-muted">Digite a senha de administrador:</label>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <input ng-model="SenhaAdministrador" type="password" class="form-control" />
+                            <button class="btn btn-default pull-right" style="margin-top:5px" ng-click="IniciarVotacao()">Confirmar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

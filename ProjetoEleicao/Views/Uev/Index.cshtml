@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+    @*$.post('@Url.Action("RegistrarDadosUeg", "Uev")', function (data) {
+        console.log(data);
+    });*@
+
+    $.get('@Url.Action("IniciaVotacao", "Uev")', function (data) {
+        console.log(data);
+    });
+</script>
